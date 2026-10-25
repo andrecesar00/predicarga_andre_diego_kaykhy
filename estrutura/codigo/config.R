@@ -13,5 +13,10 @@ cfg <- list(
 
   # --- Aula 06: realimentacao ---------------------------------------------
   prf_k   = 0,                            # 0 = sem pseudo-realimentacao
-  rocchio = c(a = 1, b = 0.75, g = 0.15)  # pesos testados do Rocchio
+  rocchio = c(a = 1, b = 0.75, g = 0.15), # pesos testados do Rocchio
+
+  # --- Aula 07: LSA e busca hibrida ---------------------------------------
+  modelo = "bm25",                        # "bm25", "lsa" ou "hibrido"
+  lsa_k  = 20,                            # dimensoes do LSA
+  rrf_c  = 60                             # constante da fusao RRF
 )
