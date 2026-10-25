@@ -1,5 +1,5 @@
 # Ficha do Projeto: Motor de Busca do Centro Antigo de São Vicente
-*criada na Aula 01 (Parte D) em 2026-09-23 · última atualização: Aula 5,5 Parte D, 2026-10-25, motor05b*
+*criada na Aula 01 (Parte D) em 2026-09-23 · última atualização: Aula 06 Parte D, 2026-10-25, motor06*
 
 ## 1. Identidade
 - Grupo: Predicarga
@@ -72,7 +72,7 @@
 - Aula 02 (TF-IDF e Similaridade Cosseno): ok (`estrutura/codigo/aula02.ipynb`)
 - Aula 03 (Limpeza + stopwords do grupo): ok; publicação do notebook em `estrutura/codigo/aula03.ipynb` não reconfirmada nesta sessão.
 - Aula 03 (Índice invertido + busca AND): ok; publicação do notebook em `estrutura/codigo/aula03.ipynb` não reconfirmada nesta sessão.
-- Decisões para o R: campos `minimo`, `grupo`, `limpar`, `acentos`, `stopwords`, `k1`, `b` e `limiar` conferidos no cfg atual.
+- Decisões para o R: campos `minimo`, `grupo`, `limpar`, `acentos`, `stopwords`, `k1`, `b`, `limiar`, `prf_k` e `rocchio` conferidos no cfg atual.
 - Aula 04: atividades de comparação entre cosseno e BM25 confirmadas pelo relatório e notebook enviados; parâmetros `k1 = 1.2` e `b = 0.75` registrados no `config.R`.
 - Aula 05 — `corpus.csv`, necessidades, guia de julgamento, qrels: corpus, necessidades e guia ok; qrels parcial: 21 itens, juiz Andre.
 - Distribuição das notas da exportação mais recente: grau 0 = 1; grau 1 = 10; grau 2 = 10.
@@ -81,6 +81,7 @@
 - Consolidado da Aula 05: `aula05_parteD_consolidado.md` criado e com estado do R anexado no Colab; publicação no GitHub pendente de confirmação.
 - Notebook da Aula 05: salvar/publicar como `estrutura/codigo/aula05.ipynb`.
 - Aula 5,5 — métricas (P@k, MAP, MRR, nDCG) dos dois modelos: ok — `estrutura/codigo/aula05b.ipynb`; avaliação parcial: 5 consultas, gabarito parcial com 21 itens.
+- Aula 06 — realimentação (Rocchio, pseudo-realimentação): ok — `estrutura/codigo/aula06.ipynb`; testado, desligado.
 - Fechamento: baixar versões finais e publicar os arquivos no repositório.
 
 ## 6. Decisões do Projeto
@@ -109,6 +110,8 @@
 - Aula 5,5: limiar de relevância grau \(\geq 1\), porque a régua mais ampla mantém documentos que tratam do assunto e torna a avaliação mais completa · `cfg$limiar = 1`.
 - Aula 5,5: consultas fora da avaliação: nenhuma · no `aula05b.ipynb`, `usar` contém q01–q05.
 - Aula 5,5: resultado — BM25 à frente na média em AP (0,077 contra 0,072), RR (0,099 contra 0,075) e nDCG; em AP, 1 vitória para cada sistema e 3 empates; ressalva: gabarito parcial, um juiz e poucas consultas não permitem afirmar superioridade · resultado, sem campo.
+- Aula 06: pseudo-realimentação **não usar**, porque no desenvolvimento o MAP caiu de 0,059 para no máximo 0,052 com \(k=3\); em q01 e q03, os top-3 eram não julgados e a PRF piorou o AP. Ressalva: gabarito parcial e apenas três consultas de desenvolvimento · `cfg$prf_k = 0`, `cfg$rocchio = c(a = 1, b = 0.75, g = 0.15)`.
+- Aula 06: resultado — Rocchio na consulta q01: AP completo 0,023 → 1,000; residual NA → NA · resultado, sem campo.
 
 ## 7. Linha do Tempo e Histórico
 - Aula 01 (Parte D): Criação do corpus de 64 parágrafos, indexação vetorial com vocabulário de 2.136 termos, validação da busca booleana e estruturação inicial dos diretórios do repositório.
@@ -146,12 +149,18 @@
   - Feito: leitura do gabarito `qrels_Andre_2026-10-25.csv`; regularização de `k1` e `b` no `config.R`; decisão do limiar de relevância igual a 1; escrita e teste das funções de métricas contra a teoria; avaliação de BM25 e cosseno nas consultas q01–q05; análise da consulta q01 e do documento relevante d43; declaração do resultado comparativo.
   - Produzido: `config.R` com `limiar = 1`; `aula05b.ipynb`; ficha e consolidado atualizados.
   - Pendente: concluir os 299 julgamentos restantes; realizar a segunda passada; calcular \(\kappa\) quando houver julgamentos comparáveis; concluir a publicação dos arquivos no GitHub.
+- Aula 06 (Parte D), 2026-10-25:
+  - Presentes: Andre Cesar Franco, Diego de Farias Carazo Prieto e Kaykhy Donizete Freitas de Oliveira.
+  - Quem digitou: Andre Cesar Franco no Módulo 7; Diego de Farias Carazo Prieto nos Módulos 8 e 9.
+  - Feito: carregamento do motor06; reescrita e teste de `rocchio` e `ranking_vetor`; aplicação do Rocchio à consulta q01; análise completa × residual; teste da PRF nas consultas de desenvolvimento; identificação de não julgados no top-3 de q01 e q03; decisão por não usar PRF.
+  - Produzido: `config.R` com `prf_k = 0` e `rocchio`; `aula06.ipynb`; ficha e consolidado atualizados.
+  - Pendente: concluir os julgamentos restantes; realizar a segunda passada; calcular \(\kappa\) quando houver julgamentos comparáveis; publicar os arquivos no GitHub.
 
 ---
 
 <!-- estado-R:inicio -->
 ## Estado do R ao fim da sessão
-*gerado por `anexar_estado()` em 2026-10-25 18:35 · R version 4.6.1 (2026-06-24) · motor05b v1 2026-10-01 · não edite à mão*
+*gerado por `anexar_estado()` em 2026-10-25 19:17 · R version 4.6.1 (2026-06-24) · motor06 v2 2026-10-08 · não edite à mão*
 
 ### Objetos
 
@@ -159,7 +168,7 @@
 |---|---|---|---|
 | `a` | character | 1 | qrels_Andre_2026-10-25.csv |
 | `arqs` | character | 1 | qrels_Andre_2026-10-25.csv |
-| `bm` | numeric, nomeado | 5 | P_at_k 0, AP 0.02326, RR 0.02326, nDCG_bin 0.1832, nDCG_grad 0.1832 |
+| `base` | numeric, nomeado | 64 | d6 0.1133, d2 0.06328, d4 0.04968, d1 0, d3 0, d5 0, ... |
 | `cfg$minimo` | numeric | 1 | 200 |
 | `cfg$limpar` | logical | 1 | TRUE |
 | `cfg$acentos` | character | 1 | translit |
@@ -168,10 +177,17 @@
 | `cfg$k1` | numeric | 1 | 1.2 |
 | `cfg$b` | numeric | 1 | 0.75 |
 | `cfg$limiar` | numeric | 1 | 1 |
+| `cfg$prf_k` | numeric | 1 | 0 |
+| `cfg$rocchio` | numeric, nomeado | 3 | a 1, b 0.75, g 0.15 |
 | `consultas` | character, nomeado | 5 | q01 monumentos historicos centro, q02 fundacao vila martim afonso, q03 ponte pensil arquitetura, q04 ataques piratas baixada san..., q05 primeiros habitantes coloni... |
 | `cp` | data.frame | 64 × 5 | colunas: id, titulo, texto, fonte, url |
-| `cs` | numeric, nomeado | 5 | P_at_k 0, AP 0.02326, RR 0.02326, nDCG_bin 0.1832, nDCG_grad 0.1832 |
+| `dev` | character | 3 | q01, q02, q03 |
+| `Dnr` | character | 0 |  |
 | `docs` | character, nomeado | 64 | d1 São Vicente, oficialmente E..., d2 São Vicente marca o início ..., d3 Com um PIB de mais de 6 bil..., d4 São Vicente preserva divers..., d5 A Ilha de Gohayó foi descob..., d6 Nas primeiras décadas do sé..., ... |
+| `Dr` | character | 1 | d43 |
+| `Dr_v` | character | 0 |  |
+| `fora` | character | 1 | d43 |
+| `g` | numeric, nomeado | 1 | d43 2 |
 | `ix$tokens` | list | 64 | elementos: d1, d2, d3, d4, d5, d6, d7, d8, ... |
 | `ix$vocab` | character | 1831 | 0, 01, 0132, 06, 1, 100, ... |
 | `ix$tf` | matrix | 1831 × 64 | linhas: 0, 01, 0132, ... \| colunas: d1, d2, d3, d4, ... |
@@ -196,11 +212,13 @@
 | `ix_aula$dl` | numeric, nomeado | 8 | d1 7, d2 9, d3 9, d4 6, d5 9, d6 8, ... |
 | `ix_aula$avgdl` | numeric | 1 | 8 |
 | `ix_aula$idf_bm25` | numeric, nomeado | 45 | a 0.6931, acelera 1.792, aprendizado 1.792, avaliacao 1.792, bm25 1.792, busca 1.281, ... |
-| `MOTOR_VERSAO` | character | 1 | motor05b v1 2026-10-01 |
+| `MOTOR_VERSAO` | character | 1 | motor06 v2 2026-10-08 |
 | `nec` | data.frame | 5 × 5 | colunas: consulta, texto_consulta, necessidade, escopo, conjunto |
+| `novo` | numeric, nomeado | 64 | d43 0.9557, d30 0.1181, d46 0.1134, d26 0.1066, d33 0.1052, d29 0.09335, ... |
 | `origem` | character, nomeado | 64 | d1 São Vicente (São Paulo), d2 São Vicente (São Paulo), d3 São Vicente (São Paulo), d4 São Vicente (São Paulo), d5 São Vicente (São Paulo), d6 São Vicente (São Paulo), ... |
 | `q` | character | 1 | q01 |
-| `q_aula` | character | 1 | modelo de recuperacao |
+| `q_aula` | numeric, nomeado | 45 | a 0, acelera 0, aprendizado 0, avaliacao 0, bm25 0, busca 0, ... |
+| `q0` | numeric, nomeado | 1831 | 0 0, 01 0, 0132 0, 06 0, 1 0, 100 0, ... |
 | `qrels$q01` | numeric, nomeado | 1 | d43 2 |
 | `qrels$q02` | numeric, nomeado | 5 | d59 1, d57 1, d15 2, d8 1, d26 2 |
 | `qrels$q03` | numeric, nomeado | 2 | d60 1, d32 1 |
@@ -208,13 +226,11 @@
 | `qrels$q05` | numeric, nomeado | 7 | d6 2, d36 2, d22 0, d58 1, d50 2, d45 2, ... |
 | `R_q` | integer, nomeado | 5 | q01 1, q02 5, q03 2, q04 6, q05 6 |
 | `REPO` | character | 1 | https://raw.githubuserconte... |
-| `tab_bm` | matrix | 5 × 5 | linhas: P_at_k, AP, RR, ... \| colunas: q01, q02, q03, q04, ... |
-| `tab_cos` | matrix | 5 × 5 | linhas: P_at_k, AP, RR, ... \| colunas: q01, q02, q03, q04, ... |
-| `txt` | character | 1 | monumentos historicos centro |
+| `tab_dev` | matrix | 4 × 3 | linhas: base, k2, k3, ... \| colunas: q01, q02, q03 |
 | `usar` | character | 5 | q01, q02, q03, q04, q05 |
 
 ### Funções definidas
 
-`anexar_estado`, `ap`, `bm25`, `bm25_doc`, `busca_AND`, `busca_booleana`, `cfg_aula`, `cosseno`, `dcg`, `docs_aula`, `estado`, `gabarito_aula`, `idf_bm25`, `idf_classico`, `indice_invertido`, `kappa_cohen`, `kappa_matriz`, `ler_qrels`, `limpar`, `matriz_tf`, `metricas`, `montar`, `ndcg`, `norm_cols`, `precisao_k`, `preparar`, `ranking_bm25`, `ranking_cosseno`, `rr`, `saturacao`, `sem_stop`, `stopwords_aula`, `tokenizar`, `vetor_consulta`
+`anexar_estado`, `ap`, `ap_q`, `bm25`, `bm25_doc`, `busca_AND`, `busca_booleana`, `cfg_aula`, `cosseno`, `dcg`, `docs_aula`, `estado`, `gabarito_aula`, `idf_bm25`, `idf_classico`, `indice_invertido`, `kappa_cohen`, `kappa_matriz`, `ler_qrels`, `limpar`, `matriz_tf`, `metricas`, `montar`, `ndcg`, `norm_cols`, `precisao_k`, `preparar`, `prf`, `ranking_bm25`, `ranking_cosseno`, `ranking_motor`, `ranking_vetor`, `recall_k`, `relevancia`, `residual`, `rocchio`, `rr`, `saturacao`, `sem_stop`, `stopwords_aula`, `tokenizar`, `vetor_consulta`
 <!-- estado-R:fim -->
 
