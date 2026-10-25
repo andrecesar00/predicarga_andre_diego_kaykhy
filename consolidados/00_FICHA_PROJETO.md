@@ -151,6 +151,20 @@
   - Limitações: apenas um juiz; necessidades redigidas com apoio substantivo da tutora; checkpoint do guia entre integrantes e demonstração de duas consultas difíceis não concluídos.
   - Pendente: terminar os 299 pares restantes, com prazo a definir; fazer segunda passada em data a definir; rodar kappa.R quando houver dois julgamentos comparáveis; regularizar parâmetros da Aula 04; anexar estado do R à ficha; baixar arquivos finais; publicar ficha, consolidado, notebook e dados no GitHub.
 
+###Atualização após o fechamento — 2026-10-25
+
+- O config.R foi corrigido e publicado no GitHub, conforme confirmação de Andre.
+- Foram preservadas as decisões da Aula 03: limpeza ativa, transliteração,
+  12 stopwords e grupo Predicarga.
+- Os parâmetros usados na Aula 04 foram registrados no config.R:
+  k1 = 1.2 e b = 0.75, com valores conferidos no Colab.
+- A ficha também já recebeu o estado do R.
+- Portanto, as pendências anteriores de regularizar os parâmetros da Aula 04
+  e anexar o estado do R à ficha estão resolvidas.
+- Permanecem pendentes: concluir os 299 julgamentos restantes, realizar a
+  segunda passada, calcular kappa quando houver julgamentos comparáveis
+  e concluir a publicação dos demais arquivos.
+
 ---
 
 <!-- estado-R:inicio -->
