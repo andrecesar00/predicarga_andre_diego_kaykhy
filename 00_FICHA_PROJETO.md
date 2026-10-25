@@ -4,10 +4,10 @@
 ## 1. Identidade
 - Grupo: Pessoa
 - Integrantes:
-  - Diego de Farias Carazo Prieto
-  - Pessoa
-  - Pessoa
-- Endereço do Repositório: https://github.com/[usuario]/projeto-[grupo]
+  - Andre Cesar Franco R.A: 0051352511037
+  - Diego de Farias Carazo Prieto R.A: 0051352511007
+  - Kaykhy Donizete Freitas de Oliveira R.A: 0051352511036
+- Endereço do Repositório: https://github.com/andrecesar00/predicarga_andre_diego_kaykhy
 - Ambiente: R (Google Colab)
 
 ## 2. Tema e Justificativa
