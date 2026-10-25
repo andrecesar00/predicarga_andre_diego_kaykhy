@@ -8,6 +8,6 @@ cfg <- list(
   ),
   grupo = "Predicarga",
   k1 = 1.2,
-  b = 0.75
+  b = 0.75,
   limiar = 1
 )
