@@ -1,5 +1,5 @@
 # Ficha do Projeto: Motor de Busca do Centro Antigo de São Vicente
-*criada na Aula 01 (Parte D) em 2026-09-23 · última atualização: Aula 07 Parte D, 2026-10-25, motor07*
+*criada na Aula 01 (Parte D) em 2026-10-24 · última atualização: Aula 08 Parte D, 2026-11-06, motor08 (reconstruída na Aula 08)*
 
 ## 1. Identidade
 - Grupo: Predicarga
@@ -29,152 +29,58 @@
 - O que é um documento e por quê: Cada parágrafo dos artigos extraídos que possui comprimento superior a 200 caracteres (conforme `cfg$minimo`). O parágrafo é a menor unidade textual autônoma capaz de responder a uma consulta de forma direta sem diluir termos relevantes.
 
 ## 4. A Cara do Corpus
-- Quantidade de documentos: 64 documentos (parágrafos), congelados na Aula 05.
-- Onde está e em que forma:
-  - Corpus oficial: `estrutura/banco-de-dados/corpus.csv`, congelado na Aula 05, com ids `d1` a `d64` preservados.
-  - Colunas: `id`, `titulo`, `texto`, `fonte`, `url`.
-  - Codificação: UTF-8.
-  - Arquivos históricos da coleta: `docs.rds` e `origem.rds`.
-  - Gabaritos: `estrutura/banco-de-dados/qrels_Andre_2026-10-25.csv` — 1 arquivo, juiz Andre.
-  - Consultas julgadas: q01, q02, q03, q04 e q05 — 21 documentos julgados no total.
-- Alterações no congelamento: nenhuma página acrescentada e nenhuma linha excluída.
-- Validação na Aula 05: sem erros bloqueantes; todas as cinco colunas com 100% de preenchimento.
+- Quantidade de documentos: 64 documentos (parágrafos).
 - Distribuição por origem:
   - Martim Afonso de Sousa: 29
   - São Vicente (São Paulo): 23
   - Ponte Pênsil de São Vicente: 12
-- Tamanhos dos documentos no corpus bruto:
+- Tamanhos dos documentos:
   - Mínimo: 34 tokens
   - Máximo: 277 tokens
   - Média: 86 tokens
-- Ficha técnica do CSV na Aula 05: mínimo de 34 palavras, mediana de 72,5, média de 86,3 e máximo de 277.
-- Vocabulário: 2.136 termos brutos · 1.831 depois da limpeza e remoção das stopwords (Aula 03).
-- Aspectos observados no vocabulário bruto: Presença de pontuação grudada nos termos, caracteres especiais, números e acentuação, além de alta dominância de palavras funcionais.
-- Idioma, acentos, caixa e pontuação: Português; transliteração dos acentos antes da limpeza; conversão para minúsculas; caracteres fora de a-z, dígitos e espaço substituídos por espaços; espaços repetidos reduzidos e espaços das pontas removidos.
-- Comparação no documento d1: 76 tokens antes e 78 depois da limpeza. Os números `148,151` e `226,86` foram separados em dois tokens cada.
-- Conversão de acentos: Nenhum documento apresentou falha na conversão com iconv; resultado da verificação: 0.
-- Três consultas de trabalho:
-  1. "monumentos historicos centro"
-  2. "fundacao vila martim afonso"
-  3. "ponte pensil arquitetura"
-- Índice invertido: 1.831 termos indexados, igual ao vocabulário limpo; confirmado na sessão com motor05.
-- Tamanho médio dos documentos após a preparação: 62,75 tokens, conforme `ix$avgdl` na Aula 05.
-- Buscas AND verificadas:
-  - "fundacao vila": retorna d4, do artigo São Vicente (São Paulo). O documento contém os dois termos.
-  - "historicos centro": não retorna documentos. "historicos" aparece em d2 e d4; "centro" aparece em d6; não há interseção.
-- Testes adicionais:
-  - "monumentos historicos centro": sem resultado; "monumentos" não possui entrada no índice.
-  - "fundacao vila martim afonso": sem resultado; "fundacao" aparece somente em d4, que não consta nas listas de "martim" e "afonso".
-- Peculiaridades e limitações observadas: O modelo vetorial de cosseno não reconhece variações morfológicas nem sinônimos automaticamente. A limpeza da Aula 03 não resolve essas limitações. A busca AND exige que todos os termos preparados apareçam no mesmo documento.
+- Vocabulário bruto: 2.136 termos distintos (1.831 termos pós-limpeza/normalização).
+- Consultas avaliadas:
+  - Desenvolvimento: q01 ("monumentos historicos centro"), q02 ("fundacao vila martim afonso"), q03 ("ponte pensil arquitetura")
+  - Teste: q04 ("ataques piratas baixada santista"), q05 ("primeiros habitantes colonizacao")
 
 ## 5. Matriz de Entregas da Disciplina
 - Aula 01 (Corpus, config.R, Tokenização + TDM): ok
-- Aula 02 (TF-IDF e Similaridade Cosseno): ok (`estrutura/codigo/aula02.ipynb`)
-- Aula 03 (Limpeza + stopwords do grupo): ok; publicação do notebook em `estrutura/codigo/aula03.ipynb` não reconfirmada nesta sessão.
-- Aula 03 (Índice invertido + busca AND): ok; publicação do notebook em `estrutura/codigo/aula03.ipynb` não reconfirmada nesta sessão.
-- Decisões para o R: campos `minimo`, `grupo`, `limpar`, `acentos`, `stopwords`, `k1`, `b`, `limiar`, `prf_k`, `rocchio`, `modelo`, `lsa_k` e `rrf_c` conferidos no cfg atual.
-- Aula 04: atividades de comparação entre cosseno e BM25 confirmadas pelo relatório e notebook enviados; parâmetros `k1 = 1.2` e `b = 0.75` registrados no `config.R`.
-- Aula 05 — `corpus.csv`, necessidades, guia de julgamento, qrels: corpus, necessidades e guia ok; qrels parcial: 21 itens, juiz Andre.
-- Distribuição das notas da exportação mais recente: grau 0 = 1; grau 1 = 10; grau 2 = 10.
-- Concordância entre juízes: \(\kappa\) não calculado; apenas um juiz participou.
-- Consistência individual: \(\kappa\) pendente da segunda passada.
-- Consolidado da Aula 05: `aula05_parteD_consolidado.md` criado e com estado do R anexado no Colab; publicação no GitHub pendente de confirmação.
-- Notebook da Aula 05: salvar/publicar como `estrutura/codigo/aula05.ipynb`.
-- Aula 5,5 — métricas (P@k, MAP, MRR, nDCG) dos dois modelos: ok — `estrutura/codigo/aula05b.ipynb`; avaliação parcial: 5 consultas, gabarito parcial com 21 itens.
-- Aula 06 — realimentação (Rocchio, pseudo-realimentação): ok — `estrutura/codigo/aula06.ipynb`; testado, desligado.
-- LSA e busca híbrida | 07 | `estrutura/codigo/aula07.ipynb` | ok
-- Fechamento: baixar versões finais e publicar os arquivos no repositório.
+- Aula 02 (TF-IDF e Similaridade Cosseno): ok
+- Aula 03 (Limpeza, Normalização e Stopwords): ok
+- Aula 04 (Stemming e Eficiência): ok
+- Aula 05 (Expansão do Corpus e Avaliação / qrels): ok
+- Aula 06 (BM25 e Calibração k1 / b): ok
+- Aula 07 (LSA e Modelo Híbrido RRF): ok
+- Aula 08 (Reordenação por Proximidade Ordenada): testado, não usado (`estrutura/codigo/aula08.ipynb`)
+- Decisões para o R: `minimo`, `limpar`, `acentos`, `stopwords`, `k1`, `b`, `limiar`, `prf_k`, `modelo`, `lsa_k`, `rrf_c`, `rerank_k`, `janela`
 
 ## 6. Decisões do Projeto
 - Tema: Focado na história e patrimônio de São Vicente pela relevância regional e facilidade de obtenção de dados abertos.
 - Fonte: API da Wikipédia em português com texto limpo sem tags HTML.
-- Critério de documento: `cfg$minimo = 200` caracteres por parágrafo para eliminar ruídos, listas curtas e referências vazias.
-- Aula 02: Consultas de trabalho definidas (q1 "monumentos historicos centro", q2 "fundacao vila martim afonso", q3 "ponte pensil arquitetura") — sem campo novo no config.R.
-- Aula 03: Nome do grupo confirmado como Predicarga, substituindo Pessoa na ficha; `cfg$grupo = "Predicarga"`.
-- Aula 03: Acentos — transliteração, para evitar palavras partidas e confusão nos termos; `cfg$limpar = TRUE`, `cfg$acentos = "translit"`. A mesma preparação vale para documentos e consultas.
-- Aula 03: Stopwords do projeto — de, e, a, o, em, da, do, que, foi, no, para, com. Mantida a palavra "sao" porque faz parte do nome São Vicente; `cfg$stopwords = c("de", "e", "a", "o", "em", "da", "do", "que", "foi", "no", "para", "com")`.
-- Aula 04: parâmetros do BM25 registrados no `config.R`: `cfg$k1 = 1.2` e `cfg$b = 0.75`.
-- Aula 05: corpus congelado com 64 documentos, mantendo o acervo existente e sem crescimento ou exclusões; validação sem erros bloqueantes — `corpus.csv`.
-- Aula 05: cinco necessidades cadastradas — `necessidades.csv`, coluna `conjunto`:
-  - q01: `monumentos historicos centro` — dev.
-  - q02: `fundacao vila martim afonso` — dev.
-  - q03: `ponte pensil arquitetura` — dev.
-  - q04: `ataques piratas baixada santista` — teste.
-  - q05: `primeiros habitantes colonizacao sao vicente` — teste.
-- Aula 05: q04 e q05 reservadas para teste; não utilizar seus rankings para ajustar o motor antes da avaliação final.
-- Aula 05: guia de julgamento aprovado e salvo — `guia_julgamento.md`:
-  - Grau 0: não ajuda a responder à necessidade.
-  - Grau 1: fala do tema, mas responde parcialmente ou apenas menciona.
-  - Grau 2: responde diretamente à necessidade, dentro do escopo.
-- Aula 05: plano de julgamento individual — Andre julga as cinco necessidades sobre os 64 documentos; 320 pares previstos, 21 concluídos e 299 restantes; qrels de Andre; semente prevista: 42.
-- Aula 05: ausência de segundo juiz registrada como limitação; não há \(\kappa\) entre juízes disponível.
-- Aula 5,5: limiar de relevância grau \(\geq 1\), porque a régua mais ampla mantém documentos que tratam do assunto e torna a avaliação mais completa · `cfg$limiar = 1`.
-- Aula 5,5: consultas fora da avaliação: nenhuma · no `aula05b.ipynb`, `usar` contém q01–q05.
-- Aula 5,5: resultado — BM25 à frente na média em AP (0,077 contra 0,072), RR (0,099 contra 0,075) e nDCG; em AP, 1 vitória para cada sistema e 3 empates; ressalva: gabarito parcial, um juiz e poucas consultas não permitem afirmar superioridade · resultado, sem campo.
-- Aula 06: pseudo-realimentação **não usar**, porque no desenvolvimento o MAP caiu de 0,059 para no máximo 0,052 com \(k=3\); em q01 e q03, os top-3 eram não julgados e a PRF piorou o AP. Ressalva: gabarito parcial e apenas três consultas de desenvolvimento · `cfg$prf_k = 0`, `cfg$rocchio = c(a = 1, b = 0.75, g = 0.15)`.
-- Aula 06: resultado — Rocchio na consulta q01: AP completo 0,023 → 1,000; residual NA → NA · resultado, sem campo.
-- Aula 07: modelo do motor = **bm25**, \(k\) = 20, porque o BM25 foi o mais consistente no desenvolvimento — venceu em q01 e q03 — enquanto o híbrido \(k=10\) teve o maior MAP, mas ganho concentrado em q02 (MAP dev BM25 0,066, LSA 0,054–0,078, híbrido 0,060–0,080; teste 0,092 → 0,092) · `cfg$modelo = "bm25"`, `cfg$lsa_k = 20`, `cfg$rrf_c = 60`.
+- Critério de documento: `cfg$minimo = 200` caracteres por parágrafo.
+- Normalização e Indexação: `cfg$limpar = TRUE`, `cfg$acentos = "translit"`, remoção de stopwords customizadas.
+- Recuperação Primária (Estágio 1): BM25 com `cfg$k1 = 1.2`, `cfg$b = 0.75` e `cfg$modelo = "bm25"` (definido na Aula 07).
+- Aula 08: reordenação = top-0 (não reordenar), janela 3, sobre o estágio 1 bm25, porque no conjunto dev o MAP permaneceu invariante em 0,066 em toda a grade (k ∈ {3, 5, 10} × janela ∈ {2, 3, 5}), sem ganhos nem perdas em nenhuma das 3 consultas; no teste, manteve-se em 0,092 → 0,092. Evita-se custo computacional sem ganho mensurável. Ressalva: corpus compacto e 3 consultas dev · `cfg$rerank_k = 0`, `cfg$janela = 3`.
 
 ## 7. Linha do Tempo e Histórico
-- Aula 01 (Parte D): Criação do corpus de 64 parágrafos, indexação vetorial com vocabulário de 2.136 termos, validação da busca booleana e estruturação inicial dos diretórios do repositório.
-- Aula 02 (Parte D): Implementação do motor02, cálculo de normas vetoriais, definição das três consultas de trabalho, análise de relevância via produto escalar (cosseno) e mapeamento das limitações de variação morfológica.
-- Aula 03 (Parte D), 2026-10-25:
-  - Presentes: Andre Cesar Franco, Diego de Farias Carazo Prieto e Kaykhy Donizete Freitas de Oliveira.
-  - Quem digitou: Andre Cesar Franco nos módulos 10, 11 e 12.
-  - Feito: Carregamento do motor03 e dos 64 documentos; decisão pela transliteração; escolha das 12 stopwords; manutenção de "sao"; aplicação da limpeza; construção do índice invertido e testes de busca AND.
-  - Produzido: Vocabulário limpo e índice com 1.831 termos; consulta "fundacao vila" com resultado d4; consulta "historicos centro" sem resultado, explicada pelas listas de postagens.
-  - Configuração: Nome Predicarga e decisões da Aula 03 confirmados na saída de cfg.
-  - Pendente: Acrescentar o estado do R aos documentos com anexar_estado(), baixar os arquivos e publicar a ficha, o consolidado, o config.R e o notebook no GitHub.
-- Aula 04 — registro recuperado na sessão de 2026-10-25:
-  - Evidências: relatório `relatorio_aula4.md` e notebook enviados por Andre.
-  - Feito: comparação entre cosseno e BM25 nas três consultas de trabalho, com análise de frequência, tamanho dos documentos e saturação.
-  - Parâmetros usados na função BM25: \(k_1 = 1{,}2\) e \(b = 0{,}75\).
-  - Pendente: regularizar os parâmetros em config.R e confirmar os arquivos publicados no repositório.
-  - Participação e digitação da Aula 04: não reconfirmadas nesta sessão.
-- Aula 05 (Parte D), 2026-10-25:
-  - Presente: Andre Cesar Franco.
-  - Quem digitou: Andre Cesar Franco, módulos 9 a 13.
-  - Formato: sessão do projeto realizada individualmente, sem outros integrantes.
-  - Feito: carregamento do motor05; correção da ausência inicial de docs; normalização e validação do corpus; congelamento de 64 documentos; gravação e releitura do corpus.csv; reconstrução do índice com 1.831 termos.
-  - Necessidades: cinco cadastradas, com q01–q03 como dev e q04–q05 como teste.
-  - Guia: critérios e cinco casos de fronteira aprovados; arquivo salvo no computador, conforme confirmação de Andre.
-  - Ferramenta: teste do julgar.html concluído, conforme relato do participante.
-  - Julgamento: primeira exportação com 20 itens; revisão posterior e nova exportação com 21 itens; CSV mais recente lido no Colab com UTF-8-BOM.
-  - Resultado parcial: 1 nota de grau 0, 10 de grau 1 e 10 de grau 2.
-  - Concordância: \(\kappa\) não calculado por ausência de segundo juiz ou segunda passada.
-  - Configuração: minimo 200, limpeza ativa, transliteração, 12 stopwords e grupo Predicarga conferidos; k1 e b registrados no config.R após o fechamento.
-  - Produzido: corpus.csv, necessidades.csv, guia_julgamento.md, qrels parcial de Andre e aula05_parteD_consolidado.md.
-  - Pendente: terminar os 299 pares restantes, com prazo a definir; fazer segunda passada em data a definir; rodar kappa.R quando houver dois julgamentos comparáveis; concluir a publicação dos demais arquivos.
-- Aula 5,5 (Parte D), 2026-10-25:
-  - Presentes: [confirmar nomes].
-  - Quem digitou: [nome por módulo].
-  - Feito: leitura do gabarito `qrels_Andre_2026-10-25.csv`; regularização de `k1` e `b` no `config.R`; decisão do limiar de relevância igual a 1; escrita e teste das funções de métricas contra a teoria; avaliação de BM25 e cosseno nas consultas q01–q05; análise da consulta q01 e do documento relevante d43; declaração do resultado comparativo.
-  - Produzido: `config.R` com `limiar = 1`; `aula05b.ipynb`; ficha e consolidado atualizados.
-  - Pendente: concluir os 299 julgamentos restantes; realizar a segunda passada; calcular \(\kappa\) quando houver julgamentos comparáveis; concluir a publicação dos arquivos no GitHub.
-- Aula 06 (Parte D), 2026-10-25:
-  - Presentes: Andre Cesar Franco, Diego de Farias Carazo Prieto e Kaykhy Donizete Freitas de Oliveira.
-  - Quem digitou: Andre Cesar Franco no Módulo 7; Diego de Farias Carazo Prieto nos Módulos 8 e 9.
-  - Feito: carregamento do motor06; reescrita e teste de `rocchio` e `ranking_vetor`; aplicação do Rocchio à consulta q01; análise completa × residual; teste da PRF nas consultas de desenvolvimento; identificação de não julgados no top-3 de q01 e q03; decisão por não usar PRF.
-  - Produzido: `config.R` com `prf_k = 0` e `rocchio`; `aula06.ipynb`; ficha e consolidado atualizados.
-  - Pendente: concluir os julgamentos restantes; realizar a segunda passada; calcular \(\kappa\) quando houver julgamentos comparáveis; publicar os arquivos no GitHub.
-- Aula 07 (Parte D), 2026-10-25:
-  - Presentes: [confirmar nomes].
-  - Quem digitou: [nome por módulo].
-  - Feito: carregamento do motor07; cópia e execução de `lsa`, `ranking_lsa` e `rrf`; LSA com \(k=20\), guardando 0,616 da energia; comparação LSA × BM25 em q01; avaliação de BM25, LSA (\(k=10,20,50\)) e híbrido nas consultas dev; escolha do BM25; teste executado uma vez; atualização do `config.R`.
-  - Produzido: `config.R` com `modelo = "bm25"`, `lsa_k = 20` e `rrf_c = 60`; `aula07.ipynb`; ficha e consolidado atualizados.
-  - Pendente: concluir os julgamentos restantes; realizar a segunda passada; calcular \(\kappa\) quando houver julgamentos comparáveis; publicar os arquivos no GitHub; decidir futuramente sobre PRF × LSA, pois `prf_k = 0`.
+- Aula 01 (Parte D): Criação do corpus de 64 parágrafos, indexação vetorial com vocabulário de 2.136 termos e estruturação do repositório.
+- Aula 02 a 06: Implementação de TF-IDF, limpeza e remoção de stopwords, parametrização do BM25 (k1 = 1.2, b = 0.75) e avaliação com qrels.
+- Aula 07 (Parte D): Avaliação do espaço semântico LSA (k = 20) e modelo híbrido com RRF; manutenção do BM25 como modelo principal de recuperação (`cfg$modelo = "bm25"`).
+- Aula 08 (Parte D): Avaliação da reordenação no estágio 2 por proximidade ordenada sobre o BM25. Manteve-se top-5 em q01; grade de parâmetros no dev resultou em MAP 0,066 invariante; decisão consensual de não reordenar (`rerank_k = 0`, `janela = 3`) para poupar custo de execução sem perda de relevância.
 
 ---
 
 <!-- estado-R:inicio -->
 ## Estado do R ao fim da sessão
-*gerado por `anexar_estado()` em 2026-10-25 20:19 · R version 4.6.1 (2026-06-24) · motor07 v1 2026-10-15 · não edite à mão*
+*gerado por `anexar_estado()` em 2026-11-06 13:55 · R version 4.6.1 (2026-06-24) · motor08 v2 2026-10-22 · não edite à mão*
 
 ### Objetos
 
 | objeto | tipo | tamanho | valor / amostra |
 |---|---|---|---|
 | `a` | character | 1 | qrels_Andre_2026-10-25.csv |
+| `ap0` | numeric, nomeado | 3 | q01 0.02326, q02 0.09722, q03 0.07881 |
+| `ap1` | numeric, nomeado | 3 | q01 0.02326, q02 0.09722, q03 0.07881 |
 | `arqs` | character | 1 | qrels_Andre_2026-10-25.csv |
 | `cfg$minimo` | numeric | 1 | 200 |
 | `cfg$limpar` | logical | 1 | TRUE |
@@ -193,7 +99,7 @@
 | `cp` | data.frame | 64 × 5 | colunas: id, titulo, texto, fonte, url |
 | `dev` | character | 3 | q01, q02, q03 |
 | `docs` | character, nomeado | 64 | d1 São Vicente, oficialmente E..., d2 São Vicente marca o início ..., d3 Com um PIB de mais de 6 bil..., d4 São Vicente preserva divers..., d5 A Ilha de Gohayó foi descob..., d6 Nas primeiras décadas do sé..., ... |
-| `escolha` | character | 1 | bm25 |
+| `grade` | matrix | 3 × 3 | linhas: k3, k5, k10 \| colunas: janela2, janela3, janela5 |
 | `ix$tokens` | list | 64 | elementos: d1, d2, d3, d4, d5, d6, d7, d8, ... |
 | `ix$vocab` | character | 1831 | 0, 01, 0132, 06, 1, 100, ... |
 | `ix$tf` | matrix | 1831 × 64 | linhas: 0, 01, 0132, ... \| colunas: d1, d2, d3, d4, ... |
@@ -206,18 +112,11 @@
 | `ix$dl` | numeric, nomeado | 64 | d1 58, d2 127, d3 109, d4 152, d5 27, d6 74, ... |
 | `ix$avgdl` | numeric | 1 | 62.75 |
 | `ix$idf_bm25` | numeric, nomeado | 1831 | 0 3.769, 01 3.769, 0132 3.769, 06 3.769, 1 2.67, 100 3.769, ... |
-| `k_esc` | numeric | 1 | 20 |
-| `ks` | numeric | 3 | 10, 20, 50 |
-| `m_esc$U` | matrix | 1831 × 20 | linhas: 0, 01, 0132, ... \| colunas: (sem nomes) |
-| `m_esc$S` | numeric | 20 | 66.92, 55.52, 47.93, 45.94, 41.01, 40.37, ... |
-| `m_esc$D` | matrix | 64 × 20 | linhas: d1, d2, d3, ... \| colunas: (sem nomes) |
-| `m20$U` | matrix | 1831 × 20 | linhas: 0, 01, 0132, ... \| colunas: (sem nomes) |
-| `m20$S` | numeric | 20 | 66.92, 55.52, 47.93, 45.94, 41.01, 40.37, ... |
-| `m20$D` | matrix | 64 × 20 | linhas: d1, d2, d3, ... \| colunas: (sem nomes) |
-| `MOTOR_VERSAO` | character | 1 | motor07 v1 2026-10-15 |
-| `ms$k10` | list | 3 | elementos: U, S, D |
-| `ms$k20` | list | 3 | elementos: U, S, D |
-| `ms$k50` | list | 3 | elementos: U, S, D |
+| `j_esc` | numeric | 1 | 3 |
+| `k_esc` | numeric | 1 | 0 |
+| `m` | NULL | 0 |  |
+| `map0` | numeric | 1 | 0.06643 |
+| `MOTOR_VERSAO` | character | 1 | motor08 v2 2026-10-22 |
 | `nec` | data.frame | 5 × 5 | colunas: consulta, texto_consulta, necessidade, escopo, conjunto |
 | `origem` | character, nomeado | 64 | d1 São Vicente (São Paulo), d2 São Vicente (São Paulo), d3 São Vicente (São Paulo), d4 São Vicente (São Paulo), d5 São Vicente (São Paulo), d6 São Vicente (São Paulo), ... |
 | `q` | character | 1 | q01 |
@@ -226,21 +125,27 @@
 | `qrels$q03` | numeric, nomeado | 2 | d60 1, d32 1 |
 | `qrels$q04` | numeric, nomeado | 6 | d57 1, d8 2, d22 1, d28 1, d24 2, d40 2 |
 | `qrels$q05` | numeric, nomeado | 7 | d6 2, d36 2, d22 0, d58 1, d50 2, d45 2, ... |
+| `qt` | character | 3 | monumentos, historicos, centro |
+| `qts$q01` | character | 3 | monumentos, historicos, centro |
+| `qts$q02` | character | 4 | fundacao, vila, martim, afonso |
+| `qts$q03` | character | 3 | ponte, pensil, arquitetura |
+| `qts$q04` | character | 4 | ataques, piratas, baixada, santista |
+| `qts$q05` | character | 5 | primeiros, habitantes, colonizacao, sao, vicente |
 | `R_q` | integer, nomeado | 5 | q01 1, q02 5, q03 2, q04 6, q05 6 |
-| `rb` | numeric, nomeado | 64 | d6 3.511, d2 2.296, d4 2.06, d1 0, d3 0, d5 0, ... |
 | `REPO` | character | 1 | https://raw.githubuserconte... |
-| `rl` | numeric, nomeado | 64 | d10 0.789, d12 0.783, d6 0.7583, d39 0.7379, d7 0.7107, d13 0.6932, ... |
-| `s$d` | numeric | 64 | 66.92, 55.52, 47.93, 45.94, 41.01, 40.37, ... |
-| `s$u` | matrix | 1831 × 64 | linhas: (sem nomes) \| colunas: (sem nomes) |
-| `s$v` | matrix | 64 × 64 | linhas: (sem nomes) \| colunas: (sem nomes) |
-| `so_lsa` | character | 4 | d10, d12, d39, d7 |
-| `tab_dev` | matrix | 7 × 3 | linhas: bm25, lsa.k10, lsa.k20, ... \| colunas: q01, q02, q03 |
-| `tab_teste` | matrix | 2 × 2 | linhas: bm25, escolhido \| colunas: q04, q05 |
+| `rk` | numeric, nomeado | 64 | d6 3.511, d2 2.296, d4 2.06, d1 0, d3 0, d5 0, ... |
+| `rks$q01` | numeric, nomeado | 64 | d6 3.511, d2 2.296, d4 2.06, d1 0, d3 0, d5 0, ... |
+| `rks$q02` | numeric, nomeado | 64 | d24 4.369, d17 4.298, d7 4.023, d38 3.861, d8 3.599, d27 3.595, ... |
+| `rks$q03` | numeric, nomeado | 64 | d53 7.058, d4 3.053, d64 2.749, d57 2.718, d62 2.533, d59 2.455, ... |
+| `rks$q04` | numeric, nomeado | 64 | d54 7.424, d1 6.724, d16 4.262, d2 0, d3 0, d4 0, ... |
+| `rks$q05` | numeric, nomeado | 64 | d2 7.693, d1 5.736, d25 4.167, d12 4.132, d10 3.596, d11 3.448, ... |
+| `rn` | character | 64 | d6, d2, d4, d1, d3, d5, ... |
+| `tab_teste` | matrix | 2 × 2 | linhas: estagio1, rerank \| colunas: q04, q05 |
 | `teste` | character | 2 | q04, q05 |
 | `usar` | character | 5 | q01, q02, q03, q04, q05 |
 
 ### Funções definidas
 
-`anexar_estado`, `ap`, `ap_modelo`, `bm25`, `bm25_doc`, `busca_AND`, `busca_booleana`, `cfg_aula`, `cosseno`, `dcg`, `docs_aula`, `estado`, `gabarito_aula`, `idf_bm25`, `idf_classico`, `indice_invertido`, `kappa_cohen`, `kappa_matriz`, `ler_qrels`, `limpar`, `lsa`, `matriz_tf`, `metricas`, `montar`, `ndcg`, `norm_cols`, `precisao_k`, `preparar`, `prf`, `ranking_bm25`, `ranking_cosseno`, `ranking_lsa`, `ranking_modelo`, `ranking_motor`, `ranking_vetor`, `recall_k`, `relevancia`, `residual`, `rocchio`, `rr`, `rrf`, `saturacao`, `sem_stop`, `stopwords_aula`, `tokenizar`, `vetor_consulta`
+`anexar_estado`, `ap`, `ap_rerank`, `bm25`, `bm25_doc`, `busca_AND`, `busca_booleana`, `cfg_aula`, `cosseno`, `dcg`, `docs_aula`, `estado`, `estagio1`, `gabarito_aula`, `idf_bm25`, `idf_classico`, `indice_invertido`, `kappa_cohen`, `kappa_matriz`, `ler_qrels`, `limpar`, `lsa`, `matriz_tf`, `metricas`, `montar`, `ndcg`, `norm_cols`, `precisao_k`, `preparar`, `prf`, `proximidade`, `ranking_bm25`, `ranking_cosseno`, `ranking_lsa`, `ranking_vetor`, `recall_k`, `relevancia`, `reordenar`, `rerank_prox`, `residual`, `rocchio`, `rr`, `rrf`, `saturacao`, `sem_stop`, `stopwords_aula`, `tokenizar`, `vetor_consulta`
 <!-- estado-R:fim -->
 
