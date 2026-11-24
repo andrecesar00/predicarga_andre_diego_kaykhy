@@ -60,6 +60,29 @@
 ## 7. Linha do Tempo e Histórico
 - Aula 01 (Parte D): Criação do corpus de 64 parágrafos, indexação vetorial com vocabulário de 2.136 termos, validação da busca booleana e estruturação inicial dos diretórios do repositório.
 
+- ### Aula 09 — Quanto reordenar: Custo × Qualidade (Estágio 2)
+
+* **Configuração avaliada:** Estágio 1 em BM25 (`cfg$modelo = "bm25"`, $k_1 = 1{,}2$, $b = 0{,}75$) com latência média $T_1 = 0{,}862\text{ ms}$ por consulta no `dev`, seguido de reordenação por proximidade (`janela = 3`).
+* **Juízes configurados:** `c("Andre")` com `limiar = 2` (preparado para inclusão futura de `"Diego"` e `"Kaykhy"`).
+* **Curva Custo × Qualidade no `dev` (`q01`, `q02`, `q03`):**
+
+| $k$ (candidatos reordenados) | MAP (`dev`) | nDCG (`dev`) | Latência Estágio 2 (ms/consulta) |
+| :--- | :---: | :---: | :---: |
+| `0` (sem reordenação) | 0,066 | 0,268 | 0,002 ms |
+| `1` | 0,066 | 0,268 | 0,175 ms |
+| `2` | 0,066 | 0,268 | 0,178 ms |
+| `3` | 0,066 | 0,268 | 0,243 ms |
+| `5` | 0,066 | 0,268 | 0,343 ms |
+| `10` | 0,066 | 0,268 | 0,578 ms |
+| `20` | 0,066 | 0,268 | 1,025 ms |
+| `50` | 0,066 | 0,268 | 2,133 ms |
+
+* **Decisão do grupo (`rerank_k = 0`):** Optou-se por **não reordenar ($k = 0$)**. No conjunto `dev`, o MAP ($0{,}066$) e o nDCG ($0{,}268$) permanecem constantes em toda a faixa avaliada, enquanto o custo cresce linearmente até $+2{,}133\text{ ms}$ (mais que triplicando o tempo total de resposta em $k = 50$). A inspeção dos documentos confirmou ausência de coocorrência dos termos das consultas dentro da janela de 3 tokens nos candidatos do topo, mantendo todos empatados em escore zero e preservando a ordenação do BM25.
+* **Validação única no `teste` (`q04`, `q05` com `rerank_k = 0`):**
+  * **`q04`:** $\text{AP} = 0{,}112$ | $\text{nDCG} = 0{,}362$
+  * **`q05`:** $\text{AP} = 0{,}071$ | $\text{nDCG} = 0{,}322$
+  * **Média (`teste`):** $\text{MAP} = 0{,}092$ | $\text{nDCG} = 0{,}342$
+
 ---
 
 <!-- estado-R:inicio -->
