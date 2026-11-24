@@ -21,22 +21,22 @@ cfg <- list(
   k1 = 1.2,
   b = 0.75,
 
-  # --- Aula 5,5: metricas -- ainda nao configuradas ----------------------
-  # limiar = 2,
-  # juizes = c("Andre"),
+  # --- Aula 5,5: metricas (adicionar "Diego" e "Kaykhy" ao concluirem) ---
+  limiar = 2,
+  juizes = c("Andre"),
 
   # --- Aula 06: realimentacao -------------------------------------------
   # prf_k = 0,
   # rocchio = c(a = 1, b = 0.75, g = 0.15),
 
   # --- Aula 07: LSA e busca hibrida --------------------------------------
-  # modelo = "bm25",
+  modelo = "bm25",
   # lsa_k = 20,
   # rrf_c = 60,
 
-  # --- Aula 08: reordenacao ---------------------------------------------
-  # rerank_k = 0,
-  # janela = 3,
+  # --- Aula 08 e 09: reordenacao (custo x qualidade) --------------------
+  rerank_k = 0,
+  janela = 3,
 
   # --- Identificacao do grupo ------------------------------------------
   grupo = "Predicarga"
